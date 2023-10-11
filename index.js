@@ -21,6 +21,8 @@ $(".watch").click(function(){
     // console.log('要素の数：' + inputContainerCount);
 
     let rates = [];
+    let todos = [];
+    let todoObj = {};
 
     // １つずつフォームのhtml構造を取り出す
     console.log('==============');
@@ -42,9 +44,16 @@ $(".watch").click(function(){
 
         console.log('==============');
 
-        // 全体の目標達成率を算出
+        // それぞれの達成率をまとめる
         rates.push(rateVal);
+        // それぞれのtodoをまとめる
+        todos.push(todoVal);
+        // オブジェクトにまとめる
+        todoObj[todoVal] = rateVal;
     }
+
+    console.log(`todos：${todos}`);
+    console.log(todoObj);
 
     // 全体の目標達成率
     console.log(`全体の達成率、配列：${rates}`);
@@ -54,12 +63,39 @@ $(".watch").click(function(){
     console.log(`全体の達成率：${achievementRate}`);
 
     $('.all_result').append(`全体の達成率：${achievementRate} %`);
+    
+    // グラフ作成
+    let context = $('.chart');
+    new Chart(context, {
+        type: 'doughnut',
+        // type: 'pie',
+        data: {
+            // labels: ["サーモン", "ハマチ", "マグロ", "エンガワ"],
+            labels: todos,
+            datasets: [{
+                backgroundColor: ["#fa8072", "#00ff7f", "#00bfff", "#f5f5f5"],
+                // data: [60, 20, 15, 5]
+                data: rates
+            }]
+        },
+        options: {
+            responsive: false
+        }
+    });
+    
+    // // 帯グラフで出力する
+    // let chartBar = $('.chart_bar');
 
 
-
+    // 入力フォーム関係
     // todo:stepの１も置換されている、一旦消してもいいかも
     // todo:値が入っていないときのバリデーション
     // todo:フォームの数を減らすボタン
     // todo:input_container1の1いらないかも
 
+    // グラフ関係
+    // todo:グラフの見た目を山みたいにして、頂上を達成にする
+    // todo:個々の達成率を帯グラフで％、CSSで
+    // todo:円グラフの色を変える
+    // todo:100% - 全体の達成率 ＝　x , xをrates配列に加えてnewArrayを作成、 newArrayを円グラフとして表示する
 });
