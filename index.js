@@ -1,5 +1,6 @@
 let formCount = 1;
 console.log(`現在のフォームの数：${formCount}`);
+let doughnutChart = null;
 
 $(".add").click(function(){
     ++formCount;
@@ -12,13 +13,17 @@ $(".add").click(function(){
 
 $(".watch").click(function(){
     // console.log("pushed");
+
+    // 既存のものを一旦削除
     $('.todo_name').empty();
     $('.rate_result').empty();
     $('.all_result').empty();
+    if(doughnutChart){
+        doughnutChart.destroy();
+    }
 
     const inputContainer = $("[class^='input_container']");
     const inputContainerCount = inputContainer.length;
-    // console.log('要素の数：' + inputContainerCount);
 
     let rates = [];
     let todos = [];
@@ -60,20 +65,27 @@ $(".watch").click(function(){
     achievementRate = rates.reduce((achievementRate, rates) => achievementRate + parseInt(rates), 0);
 
     achievementRate = achievementRate / formCount;
+    achievementRate = Math.round(achievementRate);
     console.log(`全体の達成率：${achievementRate}`);
 
     $('.all_result').append(`全体の達成率：${achievementRate} %`);
     
+    // 未達率
+    const unachieveRate = 100 - achievementRate;
+    console.log(`未達率：${unachieveRate}`);
+    todos.push('未達率');
+    rates.push(unachieveRate);
+
     // グラフ作成
     let context = $('.chart');
-    new Chart(context, {
+    doughnutChart = new Chart(context, {
         type: 'doughnut',
         // type: 'pie',
         data: {
             // labels: ["サーモン", "ハマチ", "マグロ", "エンガワ"],
             labels: todos,
             datasets: [{
-                backgroundColor: ["#fa8072", "#00ff7f", "#00bfff", "#f5f5f5"],
+                backgroundColor: ["#fa8072", "#00ff7f", "#00bfff", "#a9a9a9"],
                 // data: [60, 20, 15, 5]
                 data: rates
             }]
@@ -97,5 +109,6 @@ $(".watch").click(function(){
     // todo:グラフの見た目を山みたいにして、頂上を達成にする
     // todo:個々の達成率を帯グラフで％、CSSで
     // todo:円グラフの色を変える
-    // todo:100% - 全体の達成率 ＝　x , xをrates配列に加えてnewArrayを作成、 newArrayを円グラフとして表示する
+    // todo:円グラフのそれぞれの達成率は、全体の目標の中でx/全体にする
+    // 今は個々の目標の中でx/全体
 });
