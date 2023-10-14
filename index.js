@@ -89,6 +89,25 @@ $(".watch").click(function(){
     todos.push('未達率');
     doughnutRates.push(unachieveRate);
 
+    // 円グラフの色を作成
+    let colorCodeArray = [];
+    console.log(`フォームカウント：${formCount}`);
+    for (let i = 0; i < formCount; i++) {
+        let randomColorCode;
+        // ランダムにカラーコードを生成。#a9a9a9になったらもう一度
+        do {
+            let colorCode = Math.floor(Math.random() * 16777215).toString(16);
+            for (let count = colorCode.length; count < 6; count++) {
+                colorCode = "0" + colorCode;
+            }
+            randomColorCode = "#" + colorCode;
+        } while (randomColorCode === "#a9a9a9");
+    
+        colorCodeArray.push(randomColorCode)
+    }
+    colorCodeArray.push('#a9a9a9');
+    console.log(`カラーコード:${colorCodeArray}`);
+
     // グラフ作成
     let context = $('.chart');
     doughnutChart = new Chart(context, {
@@ -97,7 +116,8 @@ $(".watch").click(function(){
             // labels: ["サーモン", "ハマチ", "マグロ", "エンガワ"],
             labels: todos,
             datasets: [{
-                backgroundColor: ["#fa8072", "#00ff7f", "#00bfff", "#a9a9a9"],
+                // backgroundColor: ["#fa8072", "#00ff7f", "#00bfff", "#a9a9a9"],
+                backgroundColor: colorCodeArray,
                 // data: [60, 20, 15, 5]
                 data: doughnutRates
             }]
@@ -120,5 +140,4 @@ $(".watch").click(function(){
     // グラフ関係
     // todo:グラフの見た目を山みたいにして、頂上を達成にする
     // todo:個々の達成率を帯グラフで％、CSSで
-    // todo:円グラフの色を変える
 });
