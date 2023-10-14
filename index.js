@@ -70,24 +70,36 @@ $(".watch").click(function(){
 
     $('.all_result').append(`全体の達成率：${achievementRate} %`);
     
+    // グラフ用の達成率を入れる配列を作成
+    let doughnutRates = [];
+    
+    rates.forEach(rate => {
+        // rates配列の中身を１つずつformCountで割る
+        let doughnutRate = rate / formCount;
+        doughnutRate = Math.round(doughnutRate);
+        console.log(doughnutRate);
+        // 新しい配列に入れる
+        doughnutRates.push(doughnutRate);
+    });
+    console.log(doughnutRates);
+    
     // 未達率
     const unachieveRate = 100 - achievementRate;
     console.log(`未達率：${unachieveRate}`);
     todos.push('未達率');
-    rates.push(unachieveRate);
+    doughnutRates.push(unachieveRate);
 
     // グラフ作成
     let context = $('.chart');
     doughnutChart = new Chart(context, {
         type: 'doughnut',
-        // type: 'pie',
         data: {
             // labels: ["サーモン", "ハマチ", "マグロ", "エンガワ"],
             labels: todos,
             datasets: [{
                 backgroundColor: ["#fa8072", "#00ff7f", "#00bfff", "#a9a9a9"],
                 // data: [60, 20, 15, 5]
-                data: rates
+                data: doughnutRates
             }]
         },
         options: {
@@ -109,6 +121,4 @@ $(".watch").click(function(){
     // todo:グラフの見た目を山みたいにして、頂上を達成にする
     // todo:個々の達成率を帯グラフで％、CSSで
     // todo:円グラフの色を変える
-    // todo:円グラフのそれぞれの達成率は、全体の目標の中でx/全体にする
-    // 今は個々の目標の中でx/全体
 });
