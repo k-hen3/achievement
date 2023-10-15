@@ -132,7 +132,6 @@ $(".watch").click(function(){
 
 
     // 入力フォーム関係
-    // todo:stepの１も置換されている、一旦消してもいいかも
     // todo:値が入っていないときのバリデーション
     // todo:フォームの数を減らすボタン
     // todo:input_container1の1いらないかも
