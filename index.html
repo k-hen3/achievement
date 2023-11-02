@@ -11,33 +11,22 @@
 </head>
 <body>
     <p>目標を入力してください</p>
-    <div class="input_section">
-        <div class="input_container1">
-            <div>
-                <label for="todo1">todo1：</label>
-                <input type="text" id="todo1" name="todo1" placeholder="例)５時間勉強する">
-            </div>
-            <div>
-                <label for="rate1">達成率：</label>
-                <input type="number" id="rate1" name="todo1" min="0" max="100" placeholder="例)50"> %
-            </div>
-        </div>
-    </div>
+    <form class="input_section">
+    </form>
     <div>
         <input type="button" class="add" value="項目を追加する">
     </div>
     <div>
-        <input type="submit" class="watch" value="達成率を見る">
+        <input type="button" class="resultButton" value="達成率を見る">
     </div>
     <div class="result_container">
+        <div class="validationMessage"></div>
         <div class="all_result">
         </div>
         <canvas class="chart" width="300" height="300"></canvas>
         <div class="individual_result">
         </div>
     </div>
-
-
 
     <script src="index.js"></script>
 </body>
