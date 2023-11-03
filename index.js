@@ -9,7 +9,7 @@
     let newForm = '<div class="input_container" id="input_container' + formCount + '">';
     newForm += '<div class="text_form_container">';
     newForm += '<label for="todo' + formCount + '">todo' + formCount + '：</label>';
-    newForm += '<input type="text" id="todo' + formCount + '" name="todo' + formCount + '" placeholder="例)５時間勉強する">';
+    newForm += '<input type="text" id="todo' + formCount + '" name="todo' + formCount + '" placeholder="例)1時間勉強する">';
     newForm += '</div>';
     newForm += '<div class="rate_form_container">';
     newForm += '<label for="rate' + formCount + '">達成率：</label>';
@@ -29,7 +29,7 @@
         newForm = '<div class="input_container" id="input_container' + formCount + '">';
         newForm += '<div class="text_form_container">';
         newForm += '<label for="todo' + formCount + '">todo' + formCount + '：</label>';
-        newForm += '<input type="text" id="todo' + formCount + '" name="todo' + formCount + '" placeholder="例)５時間勉強する">';
+        newForm += '<input type="text" id="todo' + formCount + '" name="todo' + formCount + '" placeholder="例)1時間勉強する">';
         newForm += '</div>';
         newForm += '<div class="rate_form_container">';
         newForm += '<label for="rate' + formCount + '">達成率：</label>';
@@ -56,6 +56,7 @@
 
         let formValid = true;
         let todos = [];
+        let todoIds = [];
         let rates = [];
 
         // バリデーションエラー
@@ -72,6 +73,10 @@
             $(".input_container input[type='text']").each(function() {
                 todos.push($(this).val());
             });
+
+            $(".input_container input[type='text']").each(function() {
+                todoIds.push($(this).attr('id'));
+            });
             
             $(".input_container input[type='number']").each(function() {
                 rates.push($(this).val());
@@ -84,8 +89,8 @@
             $(".validationMessage").html("全て入力してください");
         }
 
-
         // 既存のものを一旦削除
+        $('.individual_result').empty();
         $('.all_result').empty();
         if(doughnutChart){
             doughnutChart.destroy();
@@ -100,14 +105,29 @@
         achievementRate = achievementRate / todos.length;
         // console.log(`フォームカウント：${formCount}`);
         achievementRate = Math.round(achievementRate);
-        console.log(`全体の達成率：${achievementRate}`);
+        // console.log(`全体の達成率：${achievementRate}`);
 
         if(achievementRate){
             $('.all_result').append(`全体の達成率：${achievementRate} %`);
         } else {
             $('.all_result').append("<div>すべて入力したら結果が見れます</div>");
         }
+
+        // １つずつフォームのhtml構造を取り出す
+        for (let i = 0; i < todos.length; i++) {
         
+            const todoId = todoIds[i];
+            const todoVal = todos[i];
+            const rateVal = rates[i];
+
+            // 画面出力
+            $('.individual_result').append(`<div class="todo_name">${todoId} : ${todoVal}</div>`);
+            $('.individual_result').append(`<div class="rate_result">rate : ${rateVal} %</div>`);
+
+            // console.log('==============');
+
+        }
+
         // グラフ用の達成率を入れる配列を作成
         let doughnutRates = [];
         
@@ -115,15 +135,15 @@
             // rates配列の中身を１つずつformCountで割る
             let doughnutRate = rate / todos.length;
             doughnutRate = Math.round(doughnutRate);
-            console.log(doughnutRate);
+            // console.log(doughnutRate);
             // 新しい配列に入れる
             doughnutRates.push(doughnutRate);
         });
-        console.log(doughnutRates);
+        // console.log(doughnutRates);
         
         // 未達率
         const unachieveRate = 100 - achievementRate;
-        console.log(`未達率：${unachieveRate}`);
+        // console.log(`未達率：${unachieveRate}`);
         todos.push('未達率');
         doughnutRates.push(unachieveRate);
 
@@ -143,7 +163,7 @@
             colorCodeArray.push(randomColorCode)
         }
         colorCodeArray.push('#a9a9a9');
-        console.log(`カラーコード:${colorCodeArray}`);
+        // console.log(`カラーコード:${colorCodeArray}`);
 
         // グラフ作成
         if (formValid) {
@@ -166,8 +186,6 @@
             });    
         }
         
-        // // // 帯グラフで出力する
-        // // let chartBar = $('.chart_bar');
     };
     
     // "フォームを追加"ボタンのクリックイベント
@@ -183,12 +201,9 @@
 // });
 
 
-
+    // task
     // 入力フォーム関係
-    // todo:値が入っていないときのバリデーション
-    // todo:フォームの数を減らすボタン
-    // todo:input_container1の1いらないかも
 
     // グラフ関係
     // todo:グラフの見た目を山みたいにして、頂上を達成にする
-    // todo:個々の達成率を帯グラフで％、CSSで
+    // todo:個々の達成率を帯グラフで％、CSS?
