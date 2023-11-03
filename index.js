@@ -167,10 +167,7 @@
 
         // グラフ作成
         if (formValid) {
-            let context = $('.chart');
-            doughnutChart = new Chart(context, {
-                type: 'doughnut',
-                data: {
+            let data = {
                     // labels: ["サーモン", "ハマチ", "マグロ", "エンガワ"],
                     labels: todos,
                     datasets: [{
@@ -179,12 +176,20 @@
                         // data: [60, 20, 15, 5]
                         data: doughnutRates
                     }]
-                },
-                options: {
+                };
+
+            let options = {
+                    cutout: '30%',
                     responsive: false
-                }
+                };
+
+            let context = $('.chart');
+            doughnutChart = new Chart(context, {
+                type: 'doughnut',
+                data: data,
+                options: options,
             });    
-        }
+        };
         
     };
     
