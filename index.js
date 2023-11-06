@@ -52,7 +52,6 @@
 
     // 達成度表示
     function displayResult(){
-        // console.log("pushed");
 
         let formValid = true;
         let todos = [];
@@ -69,7 +68,6 @@
 
         // todoと達成率を配列にまとめる
         if (formValid) {
-            // console.log('true');
             $(".input_container input[type='text']").each(function() {
                 todos.push($(this).val());
             });
@@ -84,13 +82,12 @@
             
             $(".validationMessage").empty();
         } else {
-            // console.log('false');
             $(".all_result").empty();
             $(".validationMessage").html("全て入力してください");
         }
 
         // 既存のものを一旦削除
-        $('.individual_result').empty();
+        $('.individual_container').empty();
         $('.all_result').empty();
         if(doughnutChart){
             doughnutChart.destroy();
@@ -98,14 +95,9 @@
 
 
         // 全体の目標達成率
-        // console.log(`全体の達成率、配列：${rates}`);
         achievementRate = rates.reduce((achievementRate, rates) => achievementRate + parseInt(rates), 0);
-
-        // console.log(`タスクの数：${todos.length}`);
         achievementRate = achievementRate / todos.length;
-        // console.log(`フォームカウント：${formCount}`);
         achievementRate = Math.round(achievementRate);
-        // console.log(`全体の達成率：${achievementRate}`);
 
         if(achievementRate){
             $('.all_result').append(`全体の達成率：${achievementRate} %`);
@@ -121,8 +113,8 @@
             const rateVal = rates[i];
 
             // 画面出力
-            $('.individual_result').append(`<div class="todo_name">${todoId} : ${todoVal}</div>`);
-            $('.individual_result').append(`<div class="rate_result">rate : ${rateVal} %</div>`);
+            $('.individual_container').append(`<div class="todo_name">${todoId} : ${todoVal}</div>`);
+            $('.individual_container').append(`<div class="rate_result">rate : ${rateVal} %</div>`);
 
             // console.log('==============');
 
@@ -130,20 +122,16 @@
 
         // グラフ用の達成率を入れる配列を作成
         let doughnutRates = [];
-        
         rates.forEach(rate => {
-            // rates配列の中身を１つずつformCountで割る
             let doughnutRate = rate / todos.length;
             doughnutRate = Math.round(doughnutRate);
-            // console.log(doughnutRate);
+
             // 新しい配列に入れる
             doughnutRates.push(doughnutRate);
         });
-        // console.log(doughnutRates);
         
         // 未達率
         const unachieveRate = 100 - achievementRate;
-        // console.log(`未達率：${unachieveRate}`);
         todos.push('未達率');
         doughnutRates.push(unachieveRate);
 
@@ -163,7 +151,6 @@
             colorCodeArray.push(randomColorCode)
         }
         colorCodeArray.push('#a9a9a9');
-        // console.log(`カラーコード:${colorCodeArray}`);
 
         // グラフ作成
         if (formValid) {
@@ -188,9 +175,32 @@
                 type: 'doughnut',
                 data: data,
                 options: options,
-            });    
+            });
+
+            // 個々のグラフ作成
+            let individualChart = $('.individual_chart');
+            // var myChart = new Chart(chart, {
+                var myChart = new Chart(individualChart, {
+                type: 'bar', // バーグラフの種類を"horizontalBar"に設定
+                data: {
+                    labels: ['todo1', 'todo2', 'todo3'],
+                    datasets: [{
+                        label: '達成率',
+                        data: [25, 20, 30, 100],
+                        backgroundColor: ['#f88', '#484', '#48f']
+                    }],
+                },
+                options: {
+                    indexAxis: 'y', // Y軸を使用して水平バーグラフを有効にする
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
         };
-        
+
     };
     
     // "フォームを追加"ボタンのクリックイベント
