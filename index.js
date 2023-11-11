@@ -175,20 +175,20 @@
                     responsive: false
                 };
 
-            let context = $('.chart');
-            doughnutChart = new Chart(context, {
+            let doughnutContext = $('.doughnut_chart');
+            doughnutChart = new Chart(doughnutContext, {
                 type: 'doughnut',
                 data: data,
                 options: options,
             });
 
             // 個々のグラフ作成
-            let cxt = $('.individual_chart');
+            let individualContext = $('.individual_chart');
             // 個々のグラフのための達成率配列の作成
             let individualRates = rates.slice();
             individualRates.push('100');
             
-            individualChart = new Chart(cxt, {
+            individualChart = new Chart(individualContext, {
                 type: 'bar',
                 data: {
                     labels: todos,
