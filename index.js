@@ -4,6 +4,7 @@
     let formCount = 1;
     // console.log(`現在のフォームカウント：${formCount}`);
     let doughnutChart = null;
+    let individualChart = null;
 
     // フォーム初期化
     let newForm = '<div class="input_container" id="input_container' + formCount + '">';
@@ -53,6 +54,16 @@
     // 達成度表示
     function displayResult(){
 
+        // 既存のものを一旦削除
+        $('.individual_container').empty();
+        $('.all_result').empty();
+        if(doughnutChart){
+            doughnutChart.destroy();
+        }
+        if(individualChart){
+            individualChart.destroy();
+        }
+
         let formValid = true;
         let todos = [];
         let todoIds = [];
@@ -86,14 +97,6 @@
             $(".validationMessage").html("全て入力してください");
         }
 
-        // 既存のものを一旦削除
-        $('.individual_container').empty();
-        $('.all_result').empty();
-        if(doughnutChart){
-            doughnutChart.destroy();
-        }
-
-
         // 全体の目標達成率
         achievementRate = rates.reduce((achievementRate, rates) => achievementRate + parseInt(rates), 0);
         achievementRate = achievementRate / todos.length;
@@ -120,7 +123,7 @@
 
         }
 
-        // グラフ用の達成率を入れる配列を作成
+        // 円グラフ用の達成率を入れる配列を作成
         let doughnutRates = [];
         rates.forEach(rate => {
             let doughnutRate = rate / todos.length;
@@ -129,15 +132,16 @@
             // 新しい配列に入れる
             doughnutRates.push(doughnutRate);
         });
-        
-        // 未達率
-        const unachieveRate = 100 - achievementRate;
-        todos.push('未達率');
-        doughnutRates.push(unachieveRate);
 
-        // 円グラフの色を作成
+        // 未達率を追加
+        const unachieveRate = 100 - achievementRate;
+        doughnutRates.push(unachieveRate);
+        let doughnutTodos = todos.slice();
+        doughnutTodos.push('未達率');
+
+        // 円グラフの色を作成   
         let colorCodeArray = [];
-        for (let i = 0; i < (todos.length - 1); i++) {
+        for (let i = 0; i < todos.length; i++) {
             let randomColorCode;
             // ランダムにカラーコードを生成。#a9a9a9になったらもう一度
             do {
@@ -154,9 +158,10 @@
 
         // グラフ作成
         if (formValid) {
+            // 円グラフ作成
             let data = {
                     // labels: ["サーモン", "ハマチ", "マグロ", "エンガワ"],
-                    labels: todos,
+                    labels: doughnutTodos,
                     datasets: [{
                         // backgroundColor: ["#fa8072", "#00ff7f", "#00bfff", "#a9a9a9"],
                         backgroundColor: colorCodeArray,
@@ -178,16 +183,19 @@
             });
 
             // 個々のグラフ作成
-            let individualChart = $('.individual_chart');
-            // var myChart = new Chart(chart, {
-                var myChart = new Chart(individualChart, {
-                type: 'bar', // バーグラフの種類を"horizontalBar"に設定
+            let cxt = $('.individual_chart');
+            // 個々のグラフのための達成率配列の作成
+            let individualRates = rates.slice();
+            individualRates.push('100');
+            
+            individualChart = new Chart(cxt, {
+                type: 'bar',
                 data: {
-                    labels: ['todo1', 'todo2', 'todo3'],
+                    labels: todos,
                     datasets: [{
-                        label: '達成率',
-                        data: [25, 20, 30, 100],
-                        backgroundColor: ['#f88', '#484', '#48f']
+                        // label: ['label'],
+                        data: individualRates,
+                        backgroundColor: colorCodeArray
                     }],
                 },
                 options: {
@@ -195,6 +203,11 @@
                     scales: {
                         x: {
                             beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false, // 凡例を非表示にする
                         }
                     }
                 }
@@ -216,9 +229,8 @@
 // });
 
 
-    // task
+    // =======Task=========
     // 入力フォーム関係
 
     // グラフ関係
-    // todo:グラフの見た目を山みたいにして、頂上を達成にする
-    // todo:個々の達成率を帯グラフで％、CSS?
+    // todo:グラフの見た目を山みたいにして、頂上を達成にする？
