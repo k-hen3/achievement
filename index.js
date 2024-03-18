@@ -117,7 +117,7 @@
 
             // 画面出力
             $('.individual_container').append(`<div class="todo_name">${todoId} : ${todoVal}</div>`);
-            $('.individual_container').append(`<div class="rate_result">rate : ${rateVal} %</div>`);
+            $('.individual_container').append(`<div class="rate_result">進捗率 : ${rateVal} %</div>`);
 
             // console.log('==============');
 
@@ -227,10 +227,3 @@
     });
     
 // });
-
-
-    // =======Task=========
-    // 入力フォーム関係
-
-    // グラフ関係
-    // todo:グラフの見た目を山みたいにして、頂上を達成にする？
