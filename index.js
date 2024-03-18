@@ -13,7 +13,7 @@
     newForm += '<input type="text" id="todo' + formCount + '" name="todo' + formCount + '" placeholder="例)1時間勉強する">';
     newForm += '</div>';
     newForm += '<div class="rate_form_container">';
-    newForm += '<label for="rate' + formCount + '">達成率：</label>';
+    newForm += '<label for="rate' + formCount + '">進捗率：</label>';
     newForm += '<input type="number" id="rate' + formCount + '" name="todo' + formCount + '" min="0" max="100" placeholder="例)50"> %';
     newForm += '</div>';
     newForm += '<div class="remove_form_container">';
@@ -33,7 +33,7 @@
         newForm += '<input type="text" id="todo' + formCount + '" name="todo' + formCount + '" placeholder="例)1時間勉強する">';
         newForm += '</div>';
         newForm += '<div class="rate_form_container">';
-        newForm += '<label for="rate' + formCount + '">達成率：</label>';
+        newForm += '<label for="rate' + formCount + '">進捗率：</label>';
         newForm += '<input type="number" id="rate' + formCount + '" name="todo' + formCount + '" min="0" max="100" placeholder="例)50"> %';
         newForm += '</div>';
         newForm += '<div class="remove_form_container">';
@@ -51,7 +51,7 @@
         $(this).closest($("[class^='input_container']")).remove();
     });
 
-    // 達成度表示
+    // 進捗度表示
     function displayResult(){
 
         // 既存のものを一旦削除
@@ -77,7 +77,7 @@
             }
         });
 
-        // todoと達成率を配列にまとめる
+        // todoと進捗率を配列にまとめる
         if (formValid) {
             $(".input_container input[type='text']").each(function() {
                 todos.push($(this).val());
@@ -97,13 +97,13 @@
             $(".validationMessage").html("全て入力してください");
         }
 
-        // 全体の目標達成率
+        // 全体の目標進捗率
         achievementRate = rates.reduce((achievementRate, rates) => achievementRate + parseInt(rates), 0);
         achievementRate = achievementRate / todos.length;
         achievementRate = Math.round(achievementRate);
 
         if(achievementRate){
-            $('.all_result').append(`全体の達成率：${achievementRate} %`);
+            $('.all_result').append(`全体の進捗率：${achievementRate} %`);
         } else {
             $('.all_result').append("<div>すべて入力したら結果が見れます</div>");
         }
@@ -123,7 +123,7 @@
 
         }
 
-        // 円グラフ用の達成率を入れる配列を作成
+        // 円グラフ用の進捗率を入れる配列を作成
         let doughnutRates = [];
         rates.forEach(rate => {
             let doughnutRate = rate / todos.length;
@@ -184,7 +184,7 @@
 
             // 個々のグラフ作成
             let individualContext = $('.individual_chart');
-            // 個々のグラフのための達成率配列の作成
+            // 個々のグラフのための進捗率配列の作成
             let individualRates = rates.slice();
             individualRates.push('100');
             
